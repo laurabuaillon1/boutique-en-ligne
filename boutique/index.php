@@ -10,6 +10,5 @@ $controller = new ProductController();
 $controller->index();
 
 
-var_dump($_SERVER['REQUEST_URI']);
 
 ?>

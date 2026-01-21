@@ -26,8 +26,8 @@ class ProductManager
     public function findAll(): array
     {
         //1-requete SQL pour récupérer tout les produits
-        $stmt = $this->db->query('SELECT*FROM products');
-        
+        $stmt = $this->db->query('SELECT * FROM products');
+
         //preparation d'un tableau vide qui recevra les donnees
         $products = [];
 
@@ -37,21 +37,20 @@ class ProductManager
 
             // 3. L'HYDRATATION MANUELLE
             // On transforme ce tableau "bête" en un Objet "intelligent"
-            $newProduct = new Products(
-                $row['id'],
+            $newProduct = new Product(
+                $row['id_products'],
                 $row['name'],
                 $row['description'],
-                $row['prix'],
-                $row['date'],
+                $row['price'],
+                $row['created_at']
             );
+            //4-On range l'object dans une liste
+            $products[] = $newProduct;
         }
 
-        //4-On range l'object dans une liste
-        $products[] = $newProduct;
 
+    
         return $products;
-        echo '<pre>';
-        var_dump($products);
     }
 
 
@@ -59,18 +58,20 @@ class ProductManager
     // C = CREER (ajouter un produit)--------------- //
     //----------------------------------------------//
 
-    public function create(Products $products): void
+    public function create(Product $products): void
     {
         $sql = "INSERT INTO produits(id, name, description,prix,date) VALUES (:id,:name,:description,:prix,:date)";
 
         //securiter contre injection SQL
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'id' => $products->getId(),
+            'id_product' => $products->getId(),
             'name' => $products->getName(),
             'description' => $products->getDescription(),
-            'prix' => $products->getPrix(),
-            'date' => $products > getDate(),
+            'price' => $products->getPrix(),
+            'created_at' => $products-> getDate(),
+            
+
         ]);
     }
 
@@ -78,7 +79,7 @@ class ProductManager
     // R = READ (récupérer produit par id,afficher un produit)  //
     //----------------------------------------------------------//  
 
-    public function findById(int $id): ?Products
+    public function findById(int $id): ?Product
     {
         //securiter contre injonction SQL
         $stmt = $this->db->prepare('SELECT*FROM produits WHERE id = :id');
@@ -93,12 +94,13 @@ class ProductManager
         }
 
         // Sinon, on crée l'objet manuellement
-        return new Products(
-            $row['id'],
+        return new Product(
+            $row['id_products'],
             $row['name'],
             $row['description'],
-            $row['prix'],
-            $row['date'],
+            $row['price'],
+            $row['created_at']
+            
         );
     }
 
@@ -107,17 +109,18 @@ class ProductManager
     //U = UPDATE (modifier un produit)-----//
     //-------------------------------------//
 
-    public function update(Products $products): bool
+    public function update(Product $products): bool
     {
         $sql = 'UPDATE produits SET id = :id, name = :name,description = :description,prix = :prix,date = :date WHERE id = :id';
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
-            'id' => $products->getId(),
+            'id_products' => $products->getId(),
             'name' => $products->getName(),
             'description' => $products->getDescription(),
-            'prix' => $products->getPrix(),
-            'date' => $products > getDate(),
+            'price' => $products->getPrix(),
+            'created_at' => $products-> getDate(),
+            
         ]);
     }
 
