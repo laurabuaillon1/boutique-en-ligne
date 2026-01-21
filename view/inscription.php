@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>authentification</title>
+    <title>Page d'inscription</title>
 </head>
 
 <body>
-    <h2>Se Connecter</h2>
+    <h2>Creer un compte</h2>
 
     <form method="POST">
         <!-- Champ Email -->
@@ -23,6 +24,7 @@
         <button type="submit">Se connecter</button>
 
     </form>
+
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 
 //CLASS USERS
 
-class Users{
+class User{
 
 //PROPRIETES
 private int $id;

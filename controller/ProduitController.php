@@ -2,9 +2,9 @@
 
 <?php
 require_once  __DIR__ . '/../config/Database.php';
-
 require_once  __DIR__ . '/../model/Produit.php';
 require_once  __DIR__ . '/../repository/ProduitRepository.php';
+require_once  __DIR__ . '/../view/accueil.php';
 
 
 class ProductController
