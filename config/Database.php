@@ -1,7 +1,5 @@
 <?php
 
-use Dom\Attr;
-
 function getPDO(): PDO {
 
     try {

@@ -7,9 +7,10 @@
 require_once __DIR__ . '/../model/Utilisateur.php';
 
 
+
 class UtilisateurRepository
 {
-
+   //son role:communiquer avec la base de donnée
    private PDO $db;
 
    public function __construct(PDO $db)
@@ -18,37 +19,14 @@ class UtilisateurRepository
    }
 
 
-
-   //------------------------------------------------//
-   // C = CREER (ajouter un produit)--------------- //
-   //----------------------------------------------//
-
-   public function create(User $users): void
+   public function findByEmail(string $email): ?User
    {
-      $sql = 'INSERT INTO users (id_users,email,password_hash,role)Values (:id_users,:email,:password_hash,:role)';
+      $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email');
+      $stmt->execute([':email' => $email]);
 
-      //securiter
-      $stmt = $this->db->prepare($sql);
-      $stmt->execute([
-         'id_users' => $users->getId(),
-         'email' => $users->getEmail(),
-         'password' => $users->getPassword(),
-         'role' => $users->getRole(),
-      ]);
-   }
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-   //----------------------------------------------------------//
-   // R = READ (récupérer produit par id,afficher un produit)  //
-   //----------------------------------------------------------// 
-
-   public function findById(int $id): ?User
-   {
-      $stmt = $this->db->prepare('SELECT * FROM users WHERE id =:id');
-      $stmt->execute(['id'=>$id]);
-
-      $row = $stmt->fetch(PDO:: FETCH_ASSOC);
-
-      if (!$row){
+      if (!$row) {
          return null;
       }
 
@@ -60,9 +38,49 @@ class UtilisateurRepository
       );
    }
 
-   //-------------------------------------//
-   //U = UPDATE (modifier un produit)-----//
-   //-------------------------------------//
+   //------------------------------------------------//
+   // C = CREER (ajouter un utilisateur)----------- //
+   //----------------------------------------------//
+
+   public function create(string $email,string $password_hash): void
+   {
+      $sql = 'INSERT INTO users (email,password_hash,role)Values (:email,:password_hash,:role)';
+
+      //securiter
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([
+         'email' => $email,
+         'password_hash' => $password_hash,
+         'role' =>'user',
+      ]);
+   }
+
+   //----------------------------------------------------------------//
+   // R = READ (récupérer urtilisateur par id,afficher un produit)  //
+   //--------------------------------------------------------------// 
+
+   public function findById(int $id): ?User
+   {
+      $stmt = $this->db->prepare('SELECT * FROM users WHERE id =:id');
+      $stmt->execute(['id' => $id]);
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if (!$row) {
+         return null;
+      }
+
+      return new User(
+         $row['id_users'],
+         $row['email'],
+         $row['password_hash'],
+         $row['role']
+      );
+   }
+
+   //------------------------------------------//
+   //U = UPDATE (modifier un utilisateur)-----//
+   //----------------------------------------//
 
    public function update(User $users): void
    {
@@ -75,9 +93,9 @@ class UtilisateurRepository
          'role' => $users->getRole(),
       ]);
    }
-   //---------------------------------------//
-   // D = DELETE (supprimer un produit)-----//
-   //---------------------------------------//
+   //--------------------------------------------//
+   // D = DELETE (supprimer un utilisateur)-----//
+   //------------------------------------------//
 
    public function delete(User $users): void
    {

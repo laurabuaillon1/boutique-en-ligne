@@ -4,7 +4,6 @@
 require_once  __DIR__ . '/../config/Database.php';
 require_once  __DIR__ . '/../model/Produit.php';
 require_once  __DIR__ . '/../repository/ProduitRepository.php';
-require_once  __DIR__ . '/../view/accueil.php';
 
 
 class ProductController
@@ -33,6 +32,8 @@ class ProductController
         $pdo = getPDO();
         $manager = new ProductManager($pdo);
         $produit = $manager->findById($id);
+        
+        require_once __DIR__ . '/../view/accueil.php';
     }
 
     //supprimer un produit par son ID

@@ -11,13 +11,22 @@ require_once __DIR__ . '/../repository/UtilisateurRepository.php';
 
 class UtilisateurController
 {
+    private UtilisateurRepository $utilisateurRepository;
+
+    public function __construct(UtilisateurRepository $utilisateurRepository)
+    {
+        $this->utilisateurRepository = $utilisateurRepository;
+    }
+
+
 
     public function inscription(): void
     {
         //VERIFIER SI L'EMAIL EXISTE DEJA
+        
 
+        //ICI JE FAIS UN POST POUR RECUPERER LES DONNEES
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             // 1-récupérer les informations du formulaire en bas dans le html
             $email = $_POST["email"];
             $password = $_POST["password"];
@@ -25,26 +34,28 @@ class UtilisateurController
 
             //2-SECURITER CONTRE LES INJECTIONS
 
-            $control = $pdb->prepare('SELECT * FROM users WHERE email = :email');
-            $control->execute([':email' => $email]);
+            $control = $this->utilisateurRepository->findByEmail($email);
 
             //3-traitement du resultat
-            $result = $control->fetch();
+            $result = $control;
 
 
             //4-boucle afficher le resultat/creer un utilisateur
 
             if ($result) {
-                $error = "Cet email esy déjà pris";
+                echo "Cet email est déjà pris";
             } else {
                 $hash = password_hash($password, PASSWORD_ARGON2ID);
-                $insert = $pdo->prepare('INSERT INTO users (email,password) VALUES(:email,:password)');
-                $insert->execute([":email" => $email, ":password" => $hash]);
+                $this->utilisateurRepository->create($email, $hash);
 
-                header("Location: login.php");
+                header("Location: ?page=login");
+                
                 exit;
             }
         }
+        
+        //LA C'EST UN GET QUI AFFICHE LA FORMULAIRE INSCRIPTION
+        require_once __DIR__  . '/../view/inscription.php';
     }
 
 
@@ -64,24 +75,28 @@ class UtilisateurController
             $password = $_POST['password'];
 
             //2-preparation de la requete
-            $control = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-
-            //3-execution
-            $control = $pdo->execute(['email' => $email]);
+            $control = $this->utilisateurRepository->findByEmail($email);;
 
             //4-traitement du resultat
-            $user = $control->fetch();
+            $user = $control;
 
 
-            if ($user && password_verify($password, $user["password"])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                header("Location: index.php");
+            if ($user && password_verify($password, $user->getPassword())) {
+                $_SESSION['user_id'] = $user->getId();
+                $_SESSION['user_email'] = $user->getEmail();
+
+
+              //header=vers quelle page je veux être redirigé
+                header("Location: ?page=index");
                 exit;
+
             } else {
-                $error = "vos identifiants sont invalides";
+                echo"vos identifiants sont invalides";
             }
         }
+        
+        //quelle page je veux afficher
+        require_once __DIR__ . '/../view/login.php';
     }
 
     public function deconnexion(): void
@@ -91,7 +106,10 @@ class UtilisateurController
 
         //faire retrouner l'utilisateur à la page de connexion
         header("Location : login.php");
+
+        require_once __DIR__ . '/../view/login.php';
     }
+
 }
 
 ?>

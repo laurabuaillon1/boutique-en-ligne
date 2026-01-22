@@ -14,14 +14,14 @@ require_once __DIR__ . '/layout/header.php';
     </head>
     
     <body>
-        <img src="../images/portrait_cheval.jpg" alt="Portrait d'un cheval alezan portant un filet de la marque petit trot" width="800" height="500">
+        <img src="./images/portrait_cheval.jpg" alt="Portrait d'un cheval alezan portant un filet de la marque petit trot" width="800" height="500">
         
         <h1>Liste des nos produits</h1>
         <div>
             <ul>
                 <?php foreach ($produits as $produit): ?>
                     <li>
-                        <img src="../images/<?=htmlspecialchars($produit->getImage()) ?>" alt="<?= htmlspecialchars($produit->getName()) ?>" width="200" height="200">
+                        <img src="./images/<?=htmlspecialchars($produit->getImage()) ?>" alt="<?= htmlspecialchars($produit->getName()) ?>" width="200" height="200">
                         <h3><?= htmlspecialchars($produit->getName()) ?></h3>
                         <p><?= htmlspecialchars($produit->getDescription()) ?></p>
                         <p><?= htmlspecialchars($produit->getPrix()) ?></p>

@@ -21,8 +21,11 @@
         <input type="password" id="password" name="password" required><br><br>
 
         <!-- Bouton -->
-        <button type="submit">Se connecter</button>
-
+        
+        <button type="submit">Creer un compte</button>
+        <a href="?page=login">Déjà un compte ?</a>
+        
+        
     </form>
 
 </body>
