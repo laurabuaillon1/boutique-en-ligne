@@ -1,6 +1,7 @@
 <!-- QU'ELLE ACTION PEUX FAIRE UN UTILISATEUR CLASSIQUE ? -->
 <?php
 
+
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../model/Utilisateur.php';
 require_once __DIR__ . '/../repository/UtilisateurRepository.php';
@@ -27,6 +28,11 @@ class UtilisateurController
 
         //ICI JE FAIS UN POST POUR RECUPERER LES DONNEES
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+        //pour le token
+        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']){
+            die("Erreur CSRF: Token invalide !");
+        }
             // 1-récupérer les informations du formulaire en bas dans le html
             $email = $_POST["email"];
             $password = $_POST["password"];
@@ -62,7 +68,6 @@ class UtilisateurController
     public function connexion(): void
     {
         //OBLIGATOIRE SI UTILISATION DE $_SERVER
-        session_start();
 
         //CONNEXION A LA DDB
         require_once __DIR__ . '/../config/Database.php';

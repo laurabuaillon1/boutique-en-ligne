@@ -23,10 +23,8 @@ class DetailCommandeRepository
     {
 
         //requete sql pour recuperer les produits
-
-        $stmt = $this->db->query('SELECT * FROM order_item WHERE order_id = order_id');
-        $stmt->execute(['order_id'=>$order_id]);
-
+        $stmt = $this->db->prepare('SELECT * FROM order_item WHERE order_id = ?');
+        $stmt->execute([$order_id]);
         $orderItem = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -38,14 +36,19 @@ class DetailCommandeRepository
                 $row['quantity'],
                 $row['unit_price']
             );
-
             $orderItem[] = $newDetailCommande;
         }
-
         return $orderItem;
-
-        
     }
+
+
+    //ajouter produit à la commande
+    public function addItem(int $order_id, int $product_id, int $quantity, float $unit_price): void
+    {
+        $stmt = $this->db->prepare('INSERT INTO order_item (order_id,product_id,quantity,unit_price) VALUES (?,?,?,?)');
+        $stmt->execute([$order_id,$product_id,$quantity,$unit_price]);
+    
+        }
 
 
     //------------------------------------------------//
@@ -99,12 +102,12 @@ class DetailCommandeRepository
         );
     }
 
-    
+
 
     //---------------------------------------//
     // D = DELETE (supprimer un produit)-----//
     //---------------------------------------//
-    
+
 
     //SUPPRIME UNE LIGNE DE COMMANDE
     public function delete(int $id): void

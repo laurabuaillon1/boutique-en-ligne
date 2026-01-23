@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -13,6 +12,7 @@
 
     <form method="POST">
         <!-- Champ Email -->
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION["csrf_token"] ?>"><!--token-->
         <label for="email">Email :</label><br>
         <input type="email" id="email" name="email" required><br><br>
 
@@ -21,11 +21,11 @@
         <input type="password" id="password" name="password" required><br><br>
 
         <!-- Bouton -->
-        
+
         <button type="submit">Creer un compte</button>
         <a href="?page=login">Déjà un compte ?</a>
-        
-        
+
+
     </form>
 
 </body>

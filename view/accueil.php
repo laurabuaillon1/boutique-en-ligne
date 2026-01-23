@@ -25,7 +25,12 @@ require_once __DIR__ . '/layout/header.php';
                         <h3><?= htmlspecialchars($produit->getName()) ?></h3>
                         <p><?= htmlspecialchars($produit->getDescription()) ?></p>
                         <p><?= htmlspecialchars($produit->getPrix()) ?></p>
-                        <a href="?page=form-ajout">Ajouter un produit</a>
+                        
+                        <form method="POST" action="?page=ajouter-au-panier">
+                            <input type="hidden" name="productId" value="<?= $produit->getId() ?>">
+                            <input type="hidden" name="csrf_token" value="<?= $_SESSION["csrf_token"] ?>">
+                            <button type="submit">Ajouter au panier</button>
+                        </form>
                     </li>
                     <?php endforeach; ?>
                 </ul>

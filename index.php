@@ -1,19 +1,37 @@
 <?php
+//token
+session_start();
+if(empty($_SESSION['csrf_token'])){
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+var_dump($_SESSION["csrf_token"]);
+
+
+//-----------------------------------------------------//
+
 //CHARGER TOUT LES CONTROLEURS ET REPOSITORIES
 
 //controleur
 require_once  './controller/ProduitController.php';
 require_once  './controller/UtilisateurController.php';
+require_once  './controller/CommandeController.php';
 
 
 //repositories
 require_once  './repository/ProduitRepository.php';
 require_once  './repository/UtilisateurRepository.php';
+require_once  './repository/DetailCommandeRepository.php';
+require_once  './repository/CommandeRepository.php';
 
 $pdo = getPDO();
 $utilisateurRepository = new UtilisateurRepository($pdo);
+$detailCommandeRepository = new DetailCommandeRepository($pdo);
+
+
 
 $page = $_GET['page'] ?? 'home';
+
+
 switch ($page) {
 
     //PRODUITS
@@ -63,7 +81,13 @@ switch ($page) {
     //PANIER
 
     case 'panier':
-        $controller = new CommandeController($detailCommandeRepository);
-        $controler->show();
+        $controler = new CommandeController($detailCommandeRepository);
+        $controler->show((int)($_GET['id'] ?? 0));
+        break;
+
+
+    case 'ajouter-au-panier':
+        $controler = new CommandeController($detailCommandeRepository);
+        $controler->add();
         break;
 }

@@ -12,10 +12,10 @@
     <nav>
         <div>
             <a href="">Page d'Accueil</a>
-            <a href="">L'univers Petit trot</a>
+            <a href="https://media.makeameme.org/created/oh-shit-not-c57fb0da7c.jpg">L'univers Petit trot</a>
             <p>Le petit trot</p>
-            <a href="">Conseils</a>
-            <a href="">Contactez-nous</a>
+            <a href="https://www.e-marketing.fr/wp-content/uploads/2025/07/meme-nos-conseils-avant-utiliser-dans-votre-communication-F-684x500.jpg">Conseils</a>
+            <a href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAbPXh1l3K7zRoUgB2r7InpsXn5bCgWBNW0g&s">Contactez-nous</a>
         </div>
         <div>
             <a href="?page=inscription">
